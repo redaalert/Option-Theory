@@ -195,7 +195,6 @@ ordinary Monte Carlo can observe **zero in-the-money paths out of
 to match the closed-form Black--Scholes price to four decimal places.
 
 ------------------------------------------------------------------------
-------------------------------------------------------------------------
 
 ## 4. Limitations and Areas for Improvement
 
