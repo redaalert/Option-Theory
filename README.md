@@ -195,7 +195,160 @@ ordinary Monte Carlo can observe **zero in-the-money paths out of
 to match the closed-form Black--Scholes price to four decimal places.
 
 ------------------------------------------------------------------------
+------------------------------------------------------------------------
 
+## 4. Limitations and Areas for Improvement
+
+Although the project provides an empirical analysis of the
+Black--Scholes model and demonstrates the efficiency gains of
+importance sampling for deep out-of-the-money options, several
+limitations should be acknowledged.
+
+### 4.1. Model Risk
+
+The empirical analysis in `BlackScholes.ipynb` shows that real
+FTSE 100 and NASDAQ log returns exhibit heavy tails, skewness, and
+volatility clustering. These observations contradict several
+assumptions underlying the Geometric Brownian Motion model.
+
+Nevertheless, the pricing and importance-sampling experiments continue
+to rely on GBM. The importance-sampling drift is therefore derived
+under a model whose assumptions are known to be empirically imperfect.
+
+This creates a model-risk limitation: the variance-reduction results
+demonstrate efficiency under the assumed GBM dynamics, but do not
+necessarily translate directly to more realistic market models.
+
+### 4.2. Constant Volatility and the Absence of Volatility Smile or Skew
+
+The pricing framework uses a single volatility parameter, derived from
+the VIX as an at-the-money volatility proxy, across all strikes.
+
+In real options markets, implied volatility varies with strike and
+maturity. In particular, equity-index options commonly exhibit a
+volatility skew, with out-of-the-money put options often carrying
+higher implied volatilities than at-the-money options.
+
+Consequently, the model does not reproduce the volatility smile or skew
+observed in listed options markets. The resulting prices should
+therefore be interpreted as outputs of a simplified Black--Scholes
+framework rather than as fully market-calibrated option prices.
+
+### 4.3. Limited Use of Market Data
+
+Although real market parameters are used in the importance-sampling
+experiments, the option-pricing analysis does not use a complete
+dataset of observed market option prices.
+
+The experiments rely on:
+- The S&P 500 index level.
+- The three-month T-bill rate.
+- The VIX as a proxy for at-the-money volatility.
+
+No systematic comparison is performed against real option-chain data,
+including observed market prices, implied volatilities, maturities, or
+strike-dependent volatility.
+
+A possible extension would be to use historical option-chain data to
+calibrate the model and compare theoretical prices with observed
+market prices.
+
+### 4.4. Sensitivity to the Importance-Sampling Drift
+
+Importance sampling can substantially reduce variance when the
+sampling distribution is appropriately chosen. However, a poorly
+specified drift parameter can reduce its effectiveness and may even
+increase the estimator's variance relative to ordinary Monte Carlo.
+
+The current notebook primarily demonstrates successful drift
+selection. It does not explicitly investigate failure cases in which
+the drift is poorly chosen.
+
+A stronger analysis would deliberately use misspecified drift values
+and compare their performance against:
+- Ordinary Monte Carlo.
+- The naive mean-shift method.
+- The drift obtained using the optimal-path criterion.
+
+This experiment would illustrate both the potential benefits and the
+risks of importance sampling, highlighting the importance of selecting
+an appropriate change of measure.
+
+### 4.5. Variance Reduction Does Not Necessarily Imply Runtime Speedup
+
+The reported variance-reduction factors measure the reduction in
+statistical variance per simulated path. They do not directly measure
+computational speedup.
+
+Importance sampling introduces additional computational costs,
+including:
+- The calculation of likelihood ratios.
+- The computation of the modified sampling distribution.
+- The one-time numerical root-finding procedure required by the
+  optimal-path drift-selection method.
+
+Therefore, a reduction in variance does not automatically imply the
+same proportional reduction in runtime.
+
+A more complete performance evaluation would benchmark:
+- Total execution time.
+- Runtime per simulated path.
+- Time required to achieve a fixed pricing precision.
+- The computational overhead of drift optimization.
+
+This would provide a more meaningful comparison of the practical
+efficiency of ordinary Monte Carlo and importance sampling.
+
+### 4.6. Focus on Single-Step European Options
+
+The importance-sampling implementation focuses on single-step,
+European-style options for which a closed-form Black--Scholes price is
+available.
+
+This setting makes it possible to benchmark the Monte Carlo estimators
+against an analytical reference price. However, it represents a
+relatively simple case compared with more complex derivatives.
+
+The more interesting applications of importance sampling involve
+path-dependent payoffs, for which:
+- The payoff depends on the evolution of the underlying asset over
+  time.
+- A closed-form pricing formula may not be available.
+- The optimal drift may require an iterative numerical procedure.
+
+In particular, Section 4.6.2 of Glasserman's book discusses methods for
+selecting an appropriate drift in settings where the optimal
+importance-sampling parameter must be determined numerically.
+
+Future work could extend the implementation to path-dependent
+derivatives, such as barrier options or Asian options, where the
+benefits of importance sampling could be studied without relying
+solely on a closed-form benchmark.
+
+### 4.7. Uncertainty in the Reported Variance-Reduction Factors
+
+The reported variance-reduction factors, including the
+3,000--8,000x range, are estimated from a single simulation run.
+
+However, the estimated variance ratio is itself a random quantity and
+can vary depending on the simulated sample and random seed. A single
+simulation run may therefore provide an unstable estimate of the true
+variance-reduction factor.
+
+A more robust evaluation would:
+- Repeat each experiment using several independent random seeds.
+- Report the mean and dispersion of the estimated variance-reduction
+  factors.
+- Construct confidence intervals using repeated simulations or
+  bootstrap methods.
+- Evaluate whether the observed improvements remain consistent across
+  different simulation batches.
+
+This would provide a more reliable assessment of the performance of
+importance sampling and reduce the risk of drawing conclusions from
+one particularly favorable simulation run.
+
+------------------------------------------------------------------------
 ## Requirements
 
 Install the required Python packages:
