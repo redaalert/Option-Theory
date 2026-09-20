@@ -14,43 +14,34 @@ the Geometric Brownian Motion (GBM) model.
 
 ## Repository Structure
 
-  -------------------------------------------------------------------------------------------------------
-  File                                                   Description
-  ------------------------------------------------------ ------------------------------------------------
-  `BlackScholes.ipynb`                                   Notebook containing the theoretical
-                                                         explanations, data collection, statistical
-                                                         analysis, and visualizations of the
-                                                         Black--Scholes model's empirical assumptions.
+| File | Description |
+|------|-------------|
+| `BlackScholes.ipynb` | Notebook containing the theoretical explanations, data collection, statistical analysis, and visualizations of the Black–Scholes model's empirical assumptions. |
+| `StochasticAnalysis.ipynb` | Notebook studying the pricing and hedging of derivative contracts within the Black–Scholes framework. |
+| `daily_closing_prices.csv` | Daily closing prices of the FTSE 100 and NASDAQ Composite (2005–2017). |
+| `weekly_closing_prices.csv` | Weekly closing prices obtained by resampling the daily data. |
+| `monthly_closing_prices.csv` | Monthly closing prices obtained by resampling the daily data. |
+| `importance_sampling/importance_sampling.py` | Core pricing engine implementing closed-form Black–Scholes pricing, ordinary Monte Carlo, importance-sampling Monte Carlo using exponential tilting, and two drift-selection rules. |
+| `importance_sampling/DOTM_Importance_Sampling.ipynb` | End-to-end demonstration of DOTM option pricing, convergence analysis, variance-reduction comparisons, and naive-versus-optimal drift selection. |
+| `importance_sampling/outputs/` | Saved figures generated during the importance-sampling notebook execution. |
+## Notebook Contents
 
-  `StochasticAnalysis.ipynb`                             Notebook studying the pricing and hedging of
-                                                         derivative contracts within the Black--Scholes
-                                                         framework.
+The notebook investigates several empirical properties of stock returns:
 
-  `daily_closing_prices.csv`                             Daily closing prices of the FTSE 100 and NASDAQ
-                                                         Composite (2005--2017).
+- Introduction to the Black–Scholes model and its assumptions.
+- Collection of historical FTSE and NASDAQ market data using Yahoo Finance.
+- Computation of logarithmic returns at daily, weekly, and monthly frequencies.
+- Visualization of stock prices on both linear and logarithmic scales.
+- Study of the convergence of logreturns toward normality as the observation period increases.
+- Analysis of heavy tails and skewness through QQ-plots and comparison with the Gaussian distribution.
+- Fitting the **Normal Inverse Gaussian (NIG)** distribution to model non-Gaussian return behavior.
+- Empirical study of autocorrelation:
+  - logreturns,
+  - absolute logreturns,
+  - squared logreturns,
+  illustrating the phenomenon of **volatility clustering**.
+- Discussion of the strengths and (many) limitations of the Black–Scholes model and  alternatives to be studied in further projects.
 
-  `weekly_closing_prices.csv`                            Weekly closing prices obtained by resampling the
-                                                         daily data.
-
-  `monthly_closing_prices.csv`                           Monthly closing prices obtained by resampling
-                                                         the daily data.
-
-  `importance_sampling/importance_sampling.py`           Core pricing engine implementing closed-form
-                                                         Black--Scholes pricing, ordinary Monte Carlo,
-                                                         importance-sampling Monte Carlo using
-                                                         exponential tilting, and two drift-selection
-                                                         rules.
-
-  `importance_sampling/DOTM_Importance_Sampling.ipynb`   End-to-end demonstration of DOTM option pricing,
-                                                         convergence analysis, variance-reduction
-                                                         comparisons, and naive-versus-optimal drift
-                                                         selection.
-
-  `importance_sampling/outputs/`                         Saved figures generated during the
-                                                         importance-sampling notebook execution.
-  -------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------
 
 ## 1. Empirical Analysis of the Black--Scholes Model
 
