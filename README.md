@@ -29,7 +29,7 @@ The notebook investigates several empirical properties of stock returns:
   - absolute logreturns,
   - squared logreturns,
   illustrating the phenomenon of **volatility clustering**.
-- Discussion of the strengths and limitations of the Black–Scholes model and possible alternatives to be studies in further projects.
+- Discussion of the strengths and (many) limitations of the Black–Scholes model and  alternatives to be studied in further projects.
 
 ## Data
 
